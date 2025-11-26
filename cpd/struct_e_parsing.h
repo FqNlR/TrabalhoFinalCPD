@@ -8,66 +8,45 @@
 #include <iomanip>
 #include <string>
 #include <fstream>
-//defines para tratar texto
-#define VIRGULA ','
-#define A_COLCHETE '['
-#define F_COLCHETE ']'
-#define A_CHAVE '{'
-#define F_CHAVE '}'
-#define ASPAS '"'
-#define D_PONTOS ':'
-#define PONTO '.'
-#define CONTRA '\\'
-#define ZERO '0'
+#include <cjson/cJSON.h>
 
-//defines para as cores
-#define B_NUM 0
-#define B_CHAR 'B'
-#define W_NUM 1
-#define W_CHAR 'W'
-#define R_NUM 2
-#define R_CHAR 'R'
-#define G_NUM 3
-#define G_CHAR 'G'
-#define U_NUM 4
-#define U_CHAR 'U'
-
-
+#define ATOMIC_CARDS "C:/Users/Jordi/OneDrive/Documentos/GitHub/TrabalhoFinalCPD/cpd/cmake-build-debug/AtomicCards.json"
+#define DATA_CARDS "data"
+#define COLORS_CARDS "colors"
+#define TEXT_CARDS "text"
+#define TYPES_CARDS "types"
+#define SUPERTYPES_CARDS "supertypes"
+#define SUBTYPES_CARDS "subtypes"
+#define MANA_CARDS "manaValue"
+#define NOME "name"
 
 using namespace std;
 
-const string entry_name = "C:/Users/Jordi/OneDrive/Documentos/GitHub/TrabalhoFinalCPD/cpd/AtomicCards.json";
-const string exit_name = "sei_la.bin";
-const string s_name = "name";
-const string s_types = "types";
-const string s_subtypes = "subtypes";
-const string s_supertypes = "supertypes";
-const string s_text = "text";
-const string s_colors = "colors";
-const string s_mana = "manaValue";
-const string s_keywords = "keywords";
-const string foreign_data = "foreignData";
-
-
-struct Carta {
-    string name;
-    string text;
-    int mana_value;
-    bool* cores;
-    int num_cores;
-    string supertypes;
-    string types;
-    string subtypes;
-    string keywords;
+class Carta {
+    public:
+        int name_sz;
+        string name;
+        int types_sz;
+        string types;
+        int subtypes_sz;
+        string subtypes;
+        int supertype_sz;
+        string supertypes;
+        int text_sz;
+        string text;
+        int colors_sz;
+        string colors;
+        int mana_value;
+        Carta *next;
+        Carta *prev;
+        void print() const;
+        void clear();
 };
 
-void todas_cartas();
-Carta parse_carta(string s);
-Carta tratar_carta(Carta c, string tipo, string escrita);
-bool *tratar_cores(string s);
-int tratar_mana(string s);
-void guardar_carta(Carta c, ofstream &archivo);
 
+
+string get_from_AtomicCards(fstream *entrada);
+bool parse_carta(Carta *out, cJSON *jsonCard, int n);//checar -1 no mana_value de out para saber see o fim
 
 
 #endif //CPD_STRUCT_E_PARSING_H

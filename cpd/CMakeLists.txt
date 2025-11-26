@@ -7,4 +7,5 @@ set(EXECUTABLE_OUTPUT_PATH cpd)
 add_executable(cpd main.cpp
         struct_e_parsing.h
         struct_e_parsing.cpp)
-
+find_package(cjSON CONFIG REQUIRED)
+target_link_libraries(cpd PRIVATE cjson)

@@ -1,0 +1,51 @@
+Package: vcpkg-cmake-config
+Version: 2024-05-23
+Architecture: x64-mingw-dynamic
+Multi-Arch: same
+Abi: f51e5946580b57058c691f8d5c0097ce7b790a5576ef42b615f6514db5414a37
+Status: install ok installed
+
+Package: vcpkg-cmake
+Version: 2024-04-23
+Architecture: x64-mingw-dynamic
+Multi-Arch: same
+Abi: e5f437c6e62341c8a679ca20ce0167962a9ad91e13efea49d233693d4c300b57
+Status: install ok installed
+
+Package: jsoncpp
+Version: 1.9.6
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-mingw-dynamic
+Multi-Arch: same
+Abi: 11bad5c2118b53afa6f930961ffa0bc6b3c460c65b9238de0282ded64fc72450
+Description: JsonCpp is a C++ library that allows manipulating JSON values, including serialization and deserialization to and from strings. It can also preserve existing comment in unserialization/serialization steps, making it a convenient format to store user input files.
+Status: purge ok not-installed
+
+Package: rapidjson
+Version: 2025-02-26
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-mingw-dynamic
+Multi-Arch: same
+Abi: 3141038ad3b828dccff824b7c1e7ca05070c9ae01346ec1fa1e3eb1d82b156e8
+Description: A fast JSON parser/generator for C++ with both SAX/DOM style API <http://rapidjson.org/>
+Status: purge ok not-installed
+
+Package: nlohmann-json
+Version: 3.12.0
+Port-Version: 1
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-mingw-dynamic
+Multi-Arch: same
+Abi: eb7200e0a5ac1dbf52dd07678b78b96a3ee19eced182cfe5aa5ff2bfdb5352c8
+Description: JSON for Modern C++
+Status: purge ok not-installed
+
+Package: cjson
+Version: 1.7.19
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-mingw-dynamic
+Multi-Arch: same
+Abi: bd82192a48a222e858bac7aae6c0b6ced4ca03b850bd3890d1804a3a5a632916
+Description: Ultralightweight JSON parser in ANSI C
+Status: install ok installed
+

@@ -1,0 +1,24 @@
+"C:\Program Files\JetBrains\CLion 2025.2.4\bin\cmake\win\x64\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug "-DCMAKE_MAKE_PROGRAM=C:/Program Files/JetBrains/CLion 2025.2.4/bin/ninja/win/x64/ninja.exe" -DCMAKE_TOOLCHAIN_FILE=C:\Users\Jordi\.vcpkg-clion\vcpkg\scripts\buildsystems\vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-mingw-dynamic -G Ninja -S C:\Users\Jordi\OneDrive\Documentos\GitHub\TrabalhoFinalCPD\cpd -B C:\Users\Jordi\OneDrive\Documentos\GitHub\TrabalhoFinalCPD\cpd\cmake-build-debug
+-- Running vcpkg install
+Detecting compiler hash for triplet x64-mingw-dynamic...
+Compiler found: C:/Program Files/JetBrains/CLion 2025.2.4/bin/mingw/bin/g++.exe
+The following packages are already installed:
+    cjson:x64-mingw-dynamic@1.7.19
+    vcpkg-cmake:x64-mingw-dynamic@2024-04-23
+    vcpkg-cmake-config:x64-mingw-dynamic@2024-05-23
+cjson provides CMake targets:
+
+  # this is heuristically generated, and may not be correct
+  find_package(cJSON CONFIG REQUIRED)
+  target_link_libraries(main PRIVATE cjson)
+
+cjson provides pkg-config modules:
+
+  # Ultralightweight JSON parser in ANSI C
+  libcjson
+
+All requested installations completed successfully in: 995 us
+-- Running vcpkg install - done
+-- Configuring done (1.5s)
+-- Generating done (0.0s)
+-- Build files have been written to: C:/Users/Jordi/OneDrive/Documentos/GitHub/TrabalhoFinalCPD/cpd/cmake-build-debug

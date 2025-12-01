@@ -1,18 +1,3 @@
-Detecting compiler hash for triplet x64-mingw-dynamic...
-Compiler found: C:/Program Files/JetBrains/CLion 2025.2.4/bin/mingw/bin/g++.exe
-The following packages are already installed:
-    cjson:x64-mingw-dynamic@1.7.19
-    vcpkg-cmake:x64-mingw-dynamic@2024-04-23
-    vcpkg-cmake-config:x64-mingw-dynamic@2024-05-23
-cjson provides CMake targets:
+error: in triplet x64-windows: Unable to find a valid Visual Studio instance
+Could not locate a complete Visual Studio instance
 
-  # this is heuristically generated, and may not be correct
-  find_package(cJSON CONFIG REQUIRED)
-  target_link_libraries(main PRIVATE cjson)
-
-cjson provides pkg-config modules:
-
-  # Ultralightweight JSON parser in ANSI C
-  libcjson
-
-All requested installations completed successfully in: 995 us

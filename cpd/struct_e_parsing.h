@@ -4,13 +4,10 @@
 
 #ifndef CPD_STRUCT_E_PARSING_H
 #define CPD_STRUCT_E_PARSING_H
-#include <iostream>
-#include <iomanip>
-#include <string>
-#include <fstream>
+#include "defs_gerais_e_cartas.h"
 #include <cjson/cJSON.h>
 
-#define ATOMIC_CARDS "C:/Users/Jordi/OneDrive/Documentos/GitHub/TrabalhoFinalCPD/cpd/cmake-build-debug/AtomicCards.json"
+
 #define DATA_CARDS "data"
 #define COLORS_CARDS "colors"
 #define TEXT_CARDS "text"
@@ -19,29 +16,6 @@
 #define SUBTYPES_CARDS "subtypes"
 #define MANA_CARDS "manaValue"
 #define NOME "name"
-
-using namespace std;
-
-class Carta {
-    public:
-        int name_sz;
-        string name;
-        int types_sz;
-        string types;
-        int subtypes_sz;
-        string subtypes;
-        int supertype_sz;
-        string supertypes;
-        int text_sz;
-        string text;
-        int colors_sz;
-        string colors;
-        int mana_value;
-        Carta *next;
-        Carta *prev;
-        void print() const;
-        void clear();
-};
 
 
 

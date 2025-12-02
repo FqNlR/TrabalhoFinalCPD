@@ -7,7 +7,6 @@
 #include <fstream>
 
 #define ERR -1
-#define CHECK_FUNC %4096
 #define ATOMIC_CARDS "AtomicCards.json"
 #define MAIN_FILE "lista-das-cartas.bin"
 #define INDEX_FILE "lista-dos-index.bin"

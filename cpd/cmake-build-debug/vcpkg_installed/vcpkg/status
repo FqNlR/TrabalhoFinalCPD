@@ -17,9 +17,9 @@ Version: 1.9.6
 Depends: vcpkg-cmake, vcpkg-cmake-config
 Architecture: x64-mingw-dynamic
 Multi-Arch: same
-Abi: 11bad5c2118b53afa6f930961ffa0bc6b3c460c65b9238de0282ded64fc72450
+Abi: 878589369a0f94fbb71fd34d6f8bf3b3ce2442c2dcac887920ace6fabd8f0fc1
 Description: JsonCpp is a C++ library that allows manipulating JSON values, including serialization and deserialization to and from strings. It can also preserve existing comment in unserialization/serialization steps, making it a convenient format to store user input files.
-Status: purge ok not-installed
+Status: install ok installed
 
 Package: rapidjson
 Version: 2025-02-26
@@ -36,9 +36,9 @@ Port-Version: 1
 Depends: vcpkg-cmake, vcpkg-cmake-config
 Architecture: x64-mingw-dynamic
 Multi-Arch: same
-Abi: eb7200e0a5ac1dbf52dd07678b78b96a3ee19eced182cfe5aa5ff2bfdb5352c8
+Abi: 13f26a93cee2dad04b0b8cd15f2bdb732f4a7749a6d8ac1460dd944040b0ae5f
 Description: JSON for Modern C++
-Status: purge ok not-installed
+Status: install ok installed
 
 Package: cjson
 Version: 1.7.19

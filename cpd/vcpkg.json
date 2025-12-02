@@ -1,10 +1,16 @@
 {
   "name" : "cpd",
   "version-string" : "1.0.0",
-  "builtin-baseline" : "dac47c6016845bf418aad6ea2165d8cb6632ec53",
+  "builtin-baseline" : "b6ebb6b65b9d2c388582c2d252963f37b1aad18a",
   "dependencies" : [ {
     "name" : "cjson",
     "version>=" : "1.7.19"
+  }, {
+    "name" : "jsoncpp",
+    "version>=" : "1.9.6"
+  }, {
+    "name" : "nlohmann-json",
+    "version>=" : "3.12.0#1"
   }, {
     "name" : "vcpkg-cmake-config",
     "version>=" : "2024-05-23"

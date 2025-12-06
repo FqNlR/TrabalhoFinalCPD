@@ -1,3 +1,4 @@
+#include "arvores_e_organizacao.h"
 #include "colors.h"
 #include "struct_e_parsing.h"
 
@@ -24,28 +25,31 @@ int main()
         cJSON_Delete(json);
         return 1;
     }
-    void limpa_aquivos();
     Carta uma_carta;
     Indexador onde;
     onde.id = 0;
     onde.pos = 0;
     int max_id = 0;
     while(parse_carta(&uma_carta, data, onde.id)) {
-        cout << onde.id << endl;
         onde.pos = uma_carta.to_main_file();
         if (onde.pos == ERR) {
             cerr<<"ERRO NO NOVO METODO DE ESCRITA"<<endl;
             return 1;
         }
-        color_store(uma_carta.colors, onde);
-        uma_carta.clear();
         if (!onde.to_index()) {
             cerr<<"ERRO NO INDEX ESCRITA"<<endl;
         }
+        uma_carta.clear();
         onde.id++;
     }
+
     max_id = onde.id;
-    for (onde.id = 0; onde.id <= max_id; onde.id++) {
+    Radix_node all[5];
+    for (int i = 0; i < 5; i++) {
+        all[i].clear();
+        all[i].root = true;
+    }
+    for (onde.id = 0; onde.id < max_id; onde.id+=1) {
         if (!onde.from_index()) {
             cerr<<"ERRO NO INDEX LEITURA"<<endl;
         }
@@ -53,10 +57,26 @@ int main()
             cerr<<"ERRO NO NOVO METODO DE LEITURA"<<endl;
             return 1;
         }
+        color_store(uma_carta.colors, onde);
+        add_to_all_radix(all, uma_carta, onde);
         uma_carta.print();
         uma_carta.clear();
     }
-    cJSON_Delete(json);
+    all[NAMES].file_path = FILE_FOR_NAMES;
+    all[TYPES].file_path = FILE_FOR_TYPES;
+    all[SUBTYPES].file_path = FILE_FOR_SUB;
+    all[SUPERTYPES].file_path = FILE_FOR_SUPER;
+    all[TEXT].file_path = FILE_FOR_TEXT;
+
+    for (int i = 0; i < 5; i++) {
+        all[i].to_file(all[i].file_path, -1);
+    }
+    auto *names = new Radix_node();
+    names->clear();
+    names->root = true;
+    names->file_path = FILE_FOR_NAMES;
+    names->from_file(0);
+
     return 0;
 }
 

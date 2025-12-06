@@ -2,61 +2,10 @@ Detecting compiler hash for triplet x64-mingw-dynamic...
 Compiler found: C:/Program Files/JetBrains/CLion 2025.2.4/bin/mingw/bin/g++.exe
 The following packages are already installed:
     cjson:x64-mingw-dynamic@1.7.19
-    vcpkg-cmake:x64-mingw-dynamic@2024-04-23
-    vcpkg-cmake-config:x64-mingw-dynamic@2024-05-23
-The following packages will be built and installed:
     jsoncpp:x64-mingw-dynamic@1.9.6
     nlohmann-json:x64-mingw-dynamic@3.12.0#1
-Restored 0 package(s) from C:\Users\Jordi\AppData\Local\vcpkg\archives in 86.8 us. Use --debug to see more details.
-Installing 1/2 jsoncpp:x64-mingw-dynamic@1.9.6...
-Building jsoncpp:x64-mingw-dynamic@1.9.6...
-C:\Users\Jordi\.vcpkg-clion\vcpkg\triplets\community\x64-mingw-dynamic.cmake: info: loaded community triplet from here. Community triplets are not built in the curated registry and are thus less likely to succeed.
--- Using cached open-source-parsers-jsoncpp-1.9.6.tar.gz
--- Cleaning sources at C:/Users/Jordi/.vcpkg-clion/vcpkg/buildtrees/jsoncpp/src/1.9.6-29ceffc35f.clean. Use --editable to skip cleaning for the packages you specify.
--- Extracting source C:/Users/Jordi/.vcpkg-clion/vcpkg/downloads/open-source-parsers-jsoncpp-1.9.6.tar.gz
--- Using source at C:/Users/Jordi/.vcpkg-clion/vcpkg/buildtrees/jsoncpp/src/1.9.6-29ceffc35f.clean
--- Configuring x64-mingw-dynamic
--- Building x64-mingw-dynamic-dbg
--- Building x64-mingw-dynamic-rel
--- Fixing pkgconfig file: C:/Users/Jordi/.vcpkg-clion/vcpkg/packages/jsoncpp_x64-mingw-dynamic/lib/pkgconfig/jsoncpp.pc
--- Using cached msys2-mingw-w64-x86_64-pkgconf-1~2.4.3-1-any.pkg.tar.zst
--- Using cached msys2-msys2-runtime-3.6.2-2-x86_64.pkg.tar.zst
--- Using msys root at C:/Users/Jordi/.vcpkg-clion/vcpkg/downloads/tools/msys2/9272adbcaf19caef
--- Fixing pkgconfig file: C:/Users/Jordi/.vcpkg-clion/vcpkg/packages/jsoncpp_x64-mingw-dynamic/debug/lib/pkgconfig/jsoncpp.pc
--- Installing: C:/Users/Jordi/.vcpkg-clion/vcpkg/packages/jsoncpp_x64-mingw-dynamic/share/jsoncpp/copyright
--- Performing post-build validation
-C:\Users\Jordi\.vcpkg-clion\vcpkg\buildtrees\versioning_\versions\jsoncpp\dde49ad9d554fd5f062c0c1deea6e54b6fdb35b2\portfile.cmake: warning: DLLs that link with obsolete C RunTime ("CRT") DLLs were installed. Installed DLLs should link with an in-support CRT. You can inspect the dependencies of a DLL with `dumpbin.exe /dependents mylibfile.dll`. If you're using a custom triplet targeting an old CRT, add set(VCPKG_POLICY_ALLOW_OBSOLETE_MSVCRT enabled) to the triplet's .cmake file. To suppress this message for this port, add set(VCPKG_POLICY_ALLOW_OBSOLETE_MSVCRT enabled)
-C:\Users\Jordi\.vcpkg-clion\vcpkg\packages\jsoncpp_x64-mingw-dynamic: note: the DLLs are relative to ${CURRENT_PACKAGES_DIR} here
-note: debug/bin/libjsoncpp.dll
-note: bin/libjsoncpp.dll
-C:\Users\Jordi\.vcpkg-clion\vcpkg\buildtrees\versioning_\versions\jsoncpp\dde49ad9d554fd5f062c0c1deea6e54b6fdb35b2\portfile.cmake: warning: Found 1 post-build check problem(s). These are usually caused by bugs in portfile.cmake or the upstream build system. Please correct these before submitting this port to the curated registry.
-Starting submission of jsoncpp:x64-mingw-dynamic@1.9.6 to 1 binary cache(s) in the background
-Elapsed time to handle jsoncpp:x64-mingw-dynamic: 7.7 s
-jsoncpp:x64-mingw-dynamic package ABI: 878589369a0f94fbb71fd34d6f8bf3b3ce2442c2dcac887920ace6fabd8f0fc1
-Installing 2/2 nlohmann-json:x64-mingw-dynamic@3.12.0#1...
-Building nlohmann-json:x64-mingw-dynamic@3.12.0#1...
-C:\Users\Jordi\.vcpkg-clion\vcpkg\triplets\community\x64-mingw-dynamic.cmake: info: loaded community triplet from here. Community triplets are not built in the curated registry and are thus less likely to succeed.
--- Using cached nlohmann-json-v3.12.0.tar.gz
--- Cleaning sources at C:/Users/Jordi/.vcpkg-clion/vcpkg/buildtrees/nlohmann-json/src/v3.12.0-087f34fe5c.clean. Use --editable to skip cleaning for the packages you specify.
--- Extracting source C:/Users/Jordi/.vcpkg-clion/vcpkg/downloads/nlohmann-json-v3.12.0.tar.gz
--- Applying patch fix-4742_std_optional.patch
--- Using source at C:/Users/Jordi/.vcpkg-clion/vcpkg/buildtrees/nlohmann-json/src/v3.12.0-087f34fe5c.clean
--- Configuring x64-mingw-dynamic
--- Building x64-mingw-dynamic-dbg
--- Building x64-mingw-dynamic-rel
--- Fixing pkgconfig file: C:/Users/Jordi/.vcpkg-clion/vcpkg/packages/nlohmann-json_x64-mingw-dynamic/share/pkgconfig/nlohmann_json.pc
--- Using cached msys2-mingw-w64-x86_64-pkgconf-1~2.4.3-1-any.pkg.tar.zst
--- Using cached msys2-msys2-runtime-3.6.2-2-x86_64.pkg.tar.zst
--- Using msys root at C:/Users/Jordi/.vcpkg-clion/vcpkg/downloads/tools/msys2/9272adbcaf19caef
--- Fixing pkgconfig file: C:/Users/Jordi/.vcpkg-clion/vcpkg/packages/nlohmann-json_x64-mingw-dynamic/debug/share/pkgconfig/nlohmann_json.pc
--- Installing: C:/Users/Jordi/.vcpkg-clion/vcpkg/packages/nlohmann-json_x64-mingw-dynamic/share/nlohmann-json/copyright
--- Performing post-build validation
-Starting submission of nlohmann-json:x64-mingw-dynamic@3.12.0#1 to 1 binary cache(s) in the background
-Elapsed time to handle nlohmann-json:x64-mingw-dynamic: 2.6 s
-nlohmann-json:x64-mingw-dynamic package ABI: 13f26a93cee2dad04b0b8cd15f2bdb732f4a7749a6d8ac1460dd944040b0ae5f
-Installed contents are licensed to you by owners. Microsoft is not responsible for, nor does it grant any licenses to, third-party packages.
-Packages installed in this vcpkg installation declare the following licenses:
-MIT
+    vcpkg-cmake:x64-mingw-dynamic@2024-04-23
+    vcpkg-cmake-config:x64-mingw-dynamic@2024-05-23
 cjson provides CMake targets:
 
   # this is heuristically generated, and may not be correct
@@ -92,7 +41,4 @@ For more information, see the docs here:
     
     https://json.nlohmann.me/api/macros/json_use_implicit_conversions/
 
-Completed submission of jsoncpp:x64-mingw-dynamic@1.9.6 to 1 binary cache(s) in 200 ms
-Waiting for 1 remaining binary cache submissions...
-Completed submission of nlohmann-json:x64-mingw-dynamic@3.12.0#1 to 1 binary cache(s) in 45.2 ms (1/1)
-All requested installations completed successfully in: 10 s
+All requested installations completed successfully in: 1.19 ms

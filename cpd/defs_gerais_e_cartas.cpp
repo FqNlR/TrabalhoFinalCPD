@@ -108,7 +108,7 @@ bool Indexador::from_index() {
     if (!file.is_open()) {
         return false;
     }
-    file.seekg(this->id*sizeof(*this), ios::beg);
+    file.seekg(this->id*sizeof(Indexador), ios::beg);
     file.read(reinterpret_cast<char *>(this), sizeof(*this));
     return true;
 }

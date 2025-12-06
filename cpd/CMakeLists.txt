@@ -10,6 +10,10 @@ add_executable(cpd main.cpp
         defs_gerais_e_cartas.h
         defs_gerais_e_cartas.cpp
         colors.h
-        colors.cpp)
+        colors.cpp
+        arvores_e_organizacao.h
+        arvores_e_organizacao.cpp
+        search.h
+        search.cpp)
 find_package(cjSON CONFIG REQUIRED)
 target_link_libraries(cpd PRIVATE cjson)

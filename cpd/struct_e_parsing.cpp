@@ -75,6 +75,8 @@ bool parse_carta(Carta *out, cJSON *jsonCard, int n) {
         tmp = cJSON_GetArrayItem(tmp2, i);
     }
 
+
+
     out->id = n;
     out->name_sz = out->name.size();
     out->types_sz = out->types.size();

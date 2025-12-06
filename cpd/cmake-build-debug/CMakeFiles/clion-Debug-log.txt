@@ -43,8 +43,8 @@ For more information, see the docs here:
     
     https://json.nlohmann.me/api/macros/json_use_implicit_conversions/
 
-All requested installations completed successfully in: 1.09 ms
+All requested installations completed successfully in: 1.27 ms
 -- Running vcpkg install - done
--- Configuring done (1.7s)
+-- Configuring done (1.8s)
 -- Generating done (0.0s)
 -- Build files have been written to: C:/Users/Jordi/OneDrive/Documentos/GitHub/TrabalhoFinalCPD/cpd/cmake-build-debug

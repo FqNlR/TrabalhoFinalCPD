@@ -1,12 +1,13 @@
 # ninja log v6
 4	477	7867651179977007	CMakeFiles/cpd.dir/main.cpp.obj	10fd6d79a4cccb71
-4	576	7867657571784351	CMakeFiles/cpd.dir/arvores_e_organizacao.cpp.obj	9aab6d7b9565f86c
 12	547	7866710549618395	CMakeFiles/cpd.dir/colors.cpp.obj	41260fdbd51d3258
+4	576	7867657571784351	CMakeFiles/cpd.dir/arvores_e_organizacao.cpp.obj	9aab6d7b9565f86c
 487	989	7854543359214938	cpd.exe	1c8ae156b76d1ed8
-576	1053	7867657577499020	cpd/cpd.exe	30c7cb5f8758fe68
+339	875	7867665233974356	cpd/cpd.exe	d25dba4155fb7173
 7	531	7866710549574616	CMakeFiles/cpd.dir/struct_e_parsing.cpp.obj	4e99186f32f4da44
 4	429	7867377540630021	CMakeFiles/cpd.dir/defs_gerais_e_cartas.cpp.obj	e03e81fd8d5ea763
-2	1699	7867665230374210	build.ninja	575b3ab7493ed9f
-2	1699	7867665230374210	C:/Users/Jordi/OneDrive/Documentos/GitHub/TrabalhoFinalCPD/cpd/cmake-build-debug/cmake_install.cmake	575b3ab7493ed9f
+2	1699	7867672851154764	build.ninja	575b3ab7493ed9f
+2	1699	7867672851124756	C:/Users/Jordi/OneDrive/Documentos/GitHub/TrabalhoFinalCPD/cpd/cmake-build-debug/cmake_install.cmake	575b3ab7493ed9f
 3	338	7867665230624385	CMakeFiles/cpd.dir/search.cpp.obj	45850eb36fda0983
-339	875	7867665233974356	cpd/cpd.exe	d25dba4155fb7173
+3	553	7867673262688982	CMakeFiles/cpd.dir/arvores_e_organizacao.cpp.obj	9aab6d7b9565f86c
+553	1067	7867673268188950	cpd/cpd.exe	d25dba4155fb7173

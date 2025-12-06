@@ -27,10 +27,10 @@ bool Radix_node::to_file(string file_path, int father) {
     }
     this->where_father = father;
     file.seekp(0, ios::end);
-    loc = file.tellp();
+    loc = file.tellp();/*
     if (father != -1) {
         this->aux_to_father(loc, this->child_number, father, &file);
-    }
+    }*/
     file.write(reinterpret_cast<char *>(&this->complete), sizeof(this->complete));
     file.write(reinterpret_cast<char *>(&this->leaf), sizeof(this->leaf));
     file.write(reinterpret_cast<char *>(&this->root), sizeof(this->root));

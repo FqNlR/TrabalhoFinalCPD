@@ -18,7 +18,7 @@ void Radix_node::clear() {
 
 bool Radix_node::to_file(string file_path, int father) {
     fstream file;
-    int loc;
+    int loc = -1;
     this->file_path = file_path;
     file.open(this->file_path, ios::app | ios::binary);
     if (!file.is_open()) {
@@ -26,11 +26,28 @@ bool Radix_node::to_file(string file_path, int father) {
         return false;
     }
     this->where_father = father;
-    file.seekp(0, ios::end);
-    loc = file.tellp();/*
+    while (loc == -1) {
+        file.seekp(0, ios::end);
+        loc = file.tellp();
+    }
     if (father != -1) {
-        this->aux_to_father(loc, this->child_number, father, &file);
-    }*/
+        file.seekg(father, ios::beg);
+        file.seekg(3*sizeof(bool), ios::cur);
+        file.seekg(sizeof(char), ios::cur);
+        file.seekg(sizeof(int), ios::cur);
+        int str_sz;
+        file.read(reinterpret_cast<char *>(&str_sz), sizeof(int));
+        file.seekp(str_sz*sizeof(char), ios::cur);
+        file.seekp(this->child_number*sizeof(int), ios::cur);
+        file.write(reinterpret_cast<char *>(&loc), sizeof(int));
+    }
+    file.close();
+    file.open(this->file_path, ios::app | ios::binary);
+    loc = -1;
+    while (loc == -1) {
+        file.seekp(0, ios::end);
+        loc = file.tellp();
+    }
     file.write(reinterpret_cast<char *>(&this->complete), sizeof(this->complete));
     file.write(reinterpret_cast<char *>(&this->leaf), sizeof(this->leaf));
     file.write(reinterpret_cast<char *>(&this->root), sizeof(this->root));
@@ -57,20 +74,6 @@ bool Radix_node::to_file(string file_path, int father) {
     }
     this->children.clear();
     return true;
-}
-
-void Radix_node::aux_to_father(int son, int child, int where, fstream *file) {
-    int loc = file->tellg();
-    file->seekg(where*sizeof(char), ios::beg);
-    file->seekg(3*sizeof(bool), ios::cur);
-    file->seekg(sizeof(char), ios::cur);
-    file->seekg(sizeof(int), ios::cur);
-    int str_sz;
-    file->read(reinterpret_cast<char *>(&str_sz), sizeof(int));
-    file->seekg(str_sz*sizeof(char), ios::cur);
-    file->seekg(child*sizeof(int), ios::cur);
-    file->write(reinterpret_cast<char *>(&son), sizeof(int));
-    file->seekg(loc*sizeof(char), ios::beg);
 }
 
 void Radix_node::from_file(int loc) {

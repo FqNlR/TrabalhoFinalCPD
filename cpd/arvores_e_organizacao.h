@@ -40,8 +40,6 @@ public:
     void from_file(int loc);//tira uma arvore completa do arquivo em file path, se torna o root ao usar is_root = true
     bool add_to_tree(Indexador find_later, string what, int pos);
 
-    private:
-    void aux_to_father(int son, int child, int where, fstream *file);//volta no arquivo e informa a posicao do nodo ao nodo pai
 };
 
 string token(string str, int *loc);

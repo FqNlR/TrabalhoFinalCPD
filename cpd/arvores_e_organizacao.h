@@ -39,7 +39,7 @@ public:
     bool to_file(string file_path, int father);//coloca no arquivo denotado por file path a arvore completa ao ser usado no head e desaloca
     void from_file(int loc);//tira uma arvore completa do arquivo em file path, se torna o root ao usar is_root = true
     bool add_to_tree(Indexador find_later, string what, int pos);
-
+    bool from_file_specific(int loc, string what, int pos);
 };
 
 string token(string str, int *loc);

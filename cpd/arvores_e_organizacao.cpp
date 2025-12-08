@@ -379,3 +379,42 @@ string token(string str, int *loc) {
     return aux;
 }
 
+bool Radix_node::from_file_specific(int loc, string what, int pos) {
+    fstream file;
+    file.open(this->file_path, ios::in | ios::binary);
+    file.seekg(loc*sizeof(char), ios::beg);
+    file.read(reinterpret_cast<char *>(&this->complete), sizeof(this->complete));
+    file.read(reinterpret_cast<char *>(&this->leaf), sizeof(this->leaf));
+    file.read(reinterpret_cast<char *>(&this->root), sizeof(this->root));
+    file.read(&this->letra, sizeof(this->letra));
+    if (what[pos] != this->letra) {
+        return false;
+    }
+    file.read(reinterpret_cast<char *>(&this->where_father), sizeof(this->where_father));
+    file.read(reinterpret_cast<char *>(&this->str_sz), sizeof(int));
+    file.read(reinterpret_cast<char *>(&this->str), this->str_sz*sizeof(char));
+    int a;
+    file.read(reinterpret_cast<char *>(&a), sizeof(int));
+    int *ind = static_cast<int *>(malloc(a * sizeof(int)));
+    for (int i = 0; i < a; i++) {
+        int b;
+        file.read(reinterpret_cast<char *>(&b), sizeof(int));
+        this->children_list.push_back(b);
+        ind[i] = b;
+    }
+    file.read(reinterpret_cast<char *>(&a), sizeof(int));
+    for (int i = 0; i < a; i++) {
+        Indexador b;
+        file.read(reinterpret_cast<char *>(&b), sizeof(int));
+        this->main_index.push_back(b);
+    }
+    if (!this->leaf) {
+        for (int yeah : this->children_list) {
+            auto *maybe = new Radix_node();
+            if (maybe->from_file_specific(yeah, what, pos+1)) {
+                this->children.push_back(maybe);
+            }
+        }
+    }
+    return true;
+}

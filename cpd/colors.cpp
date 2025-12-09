@@ -52,3 +52,35 @@ void color_store(string cores_carta, Indexador local) {
         }
     }
 }
+
+void value_store(int value, Indexador local) {
+    fstream file;
+    fstream file_info;
+    file_info.open(VALUES_PATH, ios::app | ios::in | ios::binary);
+    string num;
+    itoa(value, num.data(), 0);
+    string path = VALUE_PATH;
+    path += num;
+    file.open(path, ios::app | ios::binary);
+    file.write(reinterpret_cast<char *>(&local), sizeof(local));
+    file.close();
+    int temp1, temp2;
+    bool should = false;
+    while (!file_info.eof()) {
+        file_info.read(reinterpret_cast<char *>(&temp1), sizeof(temp1));
+        if (temp1 == value) {
+            return;
+        }
+        if (temp1 > value) {
+            should = true;
+            temp2 = value;
+        }
+        if (should) {
+            file_info.seekp(-sizeof(temp1), ios::cur);
+            file_info.write(reinterpret_cast<char *>(&temp2), sizeof(temp2));
+            temp2 = temp1;
+            file_info.read(reinterpret_cast<char *>(&temp1), sizeof(temp1));
+        }
+    }
+    file_info.write(reinterpret_cast<char *>(&temp2), sizeof(temp2));
+}

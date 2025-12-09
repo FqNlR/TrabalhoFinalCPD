@@ -26,25 +26,24 @@ public:
     char letra;
     int child_number;
     string file_path;
-    int where_father;
+    long long where_father;
     Radix_node *parent;
     int str_sz;
     string str;
-    list<int> children_list;
-    list<Radix_node *> children;
-    list<Indexador> main_index;
+    list<long long>* children_list;
+    list<Radix_node *>* children;
+    list<Indexador>* main_index;
 
     //metodos
     void clear();
-    bool to_file(string file_path, int father);//coloca no arquivo denotado por file path a arvore completa ao ser usado no head e desaloca
-    void from_file(int loc);//tira uma arvore completa do arquivo em file path, se torna o root ao usar is_root = true
+    bool to_file(string file_path,long long father);//coloca no arquivo denotado por file path a arvore completa ao ser usado no head e desaloca
+    void from_file(long long loc);//tira uma arvore completa do arquivo em file path, se torna o root ao usar is_root = true
     bool add_to_tree(Indexador find_later, string what, int pos);
     bool from_file_specific(int loc, string what, int pos);
 };
 
 string token(string str, int *loc);
 void add_to_all_radix(Radix_node *all, Carta what, Indexador where);
-void delete_old_create_new();
-
+void clear_files();
 
 #endif //CPD_ARVORES_E_ORGANIZACAO_H

@@ -6,12 +6,6 @@
     "name" : "cjson",
     "version>=" : "1.7.19"
   }, {
-    "name" : "jsoncpp",
-    "version>=" : "1.9.6"
-  }, {
-    "name" : "nlohmann-json",
-    "version>=" : "3.12.0#1"
-  }, {
     "name" : "vcpkg-cmake-config",
     "version>=" : "2024-05-23"
   }, {

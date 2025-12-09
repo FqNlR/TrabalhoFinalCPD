@@ -51,23 +51,23 @@ Indexador *merge(Indexador *left, Indexador *right, int *numerol, int numeror, i
 }
 
 Indexador *busca_radix(Radix_node* nos, string busca, int tipo, int *numero) {
-    list<Indexador> lista;
+    list<Indexador>* lista;
     if (busca != "NAO") {
         nos->from_file_specific(0, busca, 0);
     }
     Radix_node *temp = nos;
     while (!temp->complete) {
-        temp = temp->children.front();
+        temp = temp->children->front();
     }
     lista = temp->main_index;
-    Indexador *merged = static_cast<Indexador *>(malloc(lista.size()*sizeof(Indexador)));
+    Indexador *merged = static_cast<Indexador *>(malloc(lista->size()*sizeof(Indexador)));
     Indexador *help;
     int *helper;
     int i = 0;
-    for (Indexador l : lista) {
+    for (Indexador l : *lista) {
         merged[i] = l;
     }
-    for (Radix_node *l : nos->children) {
+    for (Radix_node *l : *nos->children) {
         help = busca_radix(l, "NAO",tipo, helper);
         merged = merge(merged, help, numero, *helper, tipo);
     }

@@ -6,6 +6,7 @@
 
 int main()
 {
+    clear_files();
     fstream entrada;
     entrada.open(ATOMIC_CARDS, ios::in);
     if(!entrada) {
@@ -42,7 +43,7 @@ int main()
         uma_carta.clear();
         onde.id++;
     }
-
+    cJSON_Delete(json);
     max_id = onde.id;
     Radix_node all[5];
     for (int i = 0; i < 5; i++) {
@@ -71,11 +72,11 @@ int main()
     for (int i = 0; i < 5; i++) {
         all[i].to_file(all[i].file_path, -1);
     }
-    auto *names = new Radix_node();
-    names->clear();
-    names->root = true;
-    names->file_path = FILE_FOR_NAMES;
-    names->from_file(0);
+    auto *super = new Radix_node();
+    super->clear();
+    super->root = true;
+    super->file_path = FILE_FOR_SUPER;
+    super->from_file(0);
 
     return 0;
 }

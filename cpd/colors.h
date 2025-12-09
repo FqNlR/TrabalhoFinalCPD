@@ -3,8 +3,11 @@
 #define CPD_COLORS_H
 
 #include "defs_gerais_e_cartas.h"
+#include <list>
 
 #define COLOR_PATH "COLORS/"
+#define VALUE_PATH "VALUES/"
+#define VALUES_PATH "VALUES/INFO"
 
 #define UNCOLORED 0
 
@@ -25,6 +28,6 @@
 
 
 void color_store(string cores_carta, Indexador local);
-int *color_search(int *quantas, string cores_carta);
+void value_store(int value, Indexador local);
 
 #endif //CPD_COLORS_H

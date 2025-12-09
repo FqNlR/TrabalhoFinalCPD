@@ -11,42 +11,52 @@ void Radix_node::clear() {
     this->where_father = -1;
     this->str_sz = 0;
     this->str = "";
-    this->children = *new list<Radix_node*>;
-    this->children_list = *new list<int>;
-    this->main_index = *new list<Indexador>;
+    this->children = new list<Radix_node*>;
+    this->children_list = new list<long long>;
+    this->main_index = new list<Indexador>;
 }
 
-bool Radix_node::to_file(string file_path, int father) {
+bool Radix_node::to_file(string file_p_ath,long long father) {
     fstream file;
-    int loc = -1;
-    this->file_path = file_path;
-    file.open(this->file_path, ios::app | ios::binary);
+    long long int loc = -1;
+    this->file_path = file_p_ath;
+    file.open(this->file_path, ios::in | ios::out | ios::binary);
     if (!file.is_open()) {
-        cerr << "Error opening file " << this->file_path << endl;
+        cerr << "Error opening file first at" << this->file_path << endl;
         return false;
     }
     this->where_father = father;
     while (loc == -1) {
-        file.seekp(0, ios::end);
-        loc = file.tellp();
+        file.seekg(0, ios::end);
+        loc = file.tellg();
     }
     if (father != -1) {
         file.seekg(father, ios::beg);
         file.seekg(3*sizeof(bool), ios::cur);
         file.seekg(sizeof(char), ios::cur);
+        file.seekg(sizeof(long long), ios::cur);
+        int string_sz;
+        file.read(reinterpret_cast<char *>(&string_sz), sizeof(int));
+        if (string_sz < 0) {
+            file.seekg(string_sz*sizeof(char), ios::cur);
+        }
         file.seekg(sizeof(int), ios::cur);
-        int str_sz;
-        file.read(reinterpret_cast<char *>(&str_sz), sizeof(int));
-        file.seekp(str_sz*sizeof(char), ios::cur);
-        file.seekp(this->child_number*sizeof(int), ios::cur);
+        file.seekg(sizeof(long long)*this->child_number, ios::cur);
+        long long int a = file.tellg();
+        if (a == -1) {
+            cerr<<"REALMENTE QUERO MORRER";
+        }
+        cout << a << endl;
+        file.seekp(a, ios::beg);
+        if (file.fail()) {
+            cerr << "Error opening file second att" << this->file_path << endl;
+        }
         file.write(reinterpret_cast<char *>(&loc), sizeof(int));
     }
-    file.close();
-    file.open(this->file_path, ios::app | ios::binary);
     loc = -1;
     while (loc == -1) {
-        file.seekp(0, ios::end);
-        loc = file.tellp();
+        file.seekg(0, ios::end);
+        loc = file.tellg();
     }
     file.write(reinterpret_cast<char *>(&this->complete), sizeof(this->complete));
     file.write(reinterpret_cast<char *>(&this->leaf), sizeof(this->leaf));
@@ -54,59 +64,67 @@ bool Radix_node::to_file(string file_path, int father) {
     file.write(&this->letra, sizeof(this->letra));
     file.write(reinterpret_cast<char *>(&this->where_father), sizeof(this->where_father));
     file.write(reinterpret_cast<char *>(&this->str_sz), sizeof(this->str_sz));
-    file.write(reinterpret_cast<char *>(&this->str), this->str_sz*sizeof(char));
-    int a = this->children.size();
+    if (this->str_sz != 0) {
+        file.write(reinterpret_cast<char *>(&this->str), this->str_sz*sizeof(char));
+    }
+    int a = this->children->size();
     file.write(reinterpret_cast<char *>(&a), sizeof(int));
     for (int i = 0; i < a; i++) {
         int b = 0;
         file.write(reinterpret_cast<char *>(&b), sizeof(int));
     }
-    a = this->main_index.size();
+    a = this->main_index->size();
     file.write(reinterpret_cast<char *>(&a), sizeof(int));
-    for (Indexador entrada : this->main_index) {
+    for (Indexador entrada : *this->main_index) {
         file.write(reinterpret_cast<char *>(&entrada), sizeof(entrada));
     }
     file.close();
+    a = 0;
     if (!this->leaf) {
-        for (Radix_node *maybe : this->children) {
+        for (Radix_node *maybe : *this->children) {
+            maybe->child_number = a;
             maybe->to_file(file_path, loc);
+            a++;
         }
     }
-    this->children.clear();
+    this->children->clear();
     return true;
 }
 
-void Radix_node::from_file(int loc) {
+void Radix_node::from_file(long long loc) {
     fstream file;
     file.open(this->file_path, ios::in | ios::binary);
-    file.seekg(loc*sizeof(char), ios::beg);
+    file.seekg(loc, ios::beg);
     file.read(reinterpret_cast<char *>(&this->complete), sizeof(this->complete));
     file.read(reinterpret_cast<char *>(&this->leaf), sizeof(this->leaf));
     file.read(reinterpret_cast<char *>(&this->root), sizeof(this->root));
     file.read(&this->letra, sizeof(this->letra));
     file.read(reinterpret_cast<char *>(&this->where_father), sizeof(this->where_father));
     file.read(reinterpret_cast<char *>(&this->str_sz), sizeof(int));
-    file.read(reinterpret_cast<char *>(&this->str), this->str_sz*sizeof(char));
+    if (this->str_sz != 0) {
+        file.read(reinterpret_cast<char *>(&this->str), this->str_sz*sizeof(char));
+    }
     int a;
     file.read(reinterpret_cast<char *>(&a), sizeof(int));
-    int *ind = static_cast<int *>(malloc(a * sizeof(int)));
+    this->children_list = new list<long long>;
     for (int i = 0; i < a; i++) {
-        int b;
-        file.read(reinterpret_cast<char *>(&b), sizeof(int));
-        this->children_list.push_back(b);
-        ind[i] = b;
+        long long b;
+        file.read(reinterpret_cast<char *>(&b), sizeof(b));
+        this->children_list->push_back(b);
     }
     file.read(reinterpret_cast<char *>(&a), sizeof(int));
+    this->main_index = new list<Indexador>;
     for (int i = 0; i < a; i++) {
         Indexador b;
         file.read(reinterpret_cast<char *>(&b), sizeof(int));
-        this->main_index.push_back(b);
+        this->main_index->push_back(b);
     }
+    this->children = new list<Radix_node*>;
     if (!this->leaf) {
-        for (int yeah : this->children_list) {
+        for (long long yeah : *this->children_list) {
             auto *maybe = new Radix_node();
             maybe->from_file(yeah);
-            this->children.push_back(maybe);
+            this->children->push_back(maybe);
         }
     }
 }
@@ -114,8 +132,8 @@ void Radix_node::from_file(int loc) {
 bool Radix_node::add_to_tree(Indexador find_later, string what, int pos) {
     int cont = 0;
     if (this->root) {
-        if (!this->children.empty()) {
-            for (Radix_node *maybe : this->children) {
+        if (!this->children->empty()) {
+            for (Radix_node *maybe : *this->children) {
                 if (maybe->add_to_tree(find_later, what, pos)) {
                     return true;
                 }
@@ -126,18 +144,18 @@ bool Radix_node::add_to_tree(Indexador find_later, string what, int pos) {
         maybe->child_number = cont - 1;
         maybe->clear();
         maybe->letra = what[pos];
-        maybe->main_index.push_back(find_later);
+        maybe->main_index->push_back(find_later);
         maybe->parent = this;
         maybe->complete = true;
         maybe->leaf = true;
         maybe->str_sz = what.size();
         maybe->str = what;
         maybe->file_path = this->file_path;
-        if (this->children.size() == 0) {
-            this->children.push_back(maybe);
+        if (this->children->size() == 0) {
+            this->children->push_back(maybe);
             return true;
         }
-        int tam = this->children.size();
+        int tam = this->children->size();
         Radix_node* a[tam+1];
         int i = 0;
         for (i = 0; i < tam + 1; i++) {
@@ -145,7 +163,7 @@ bool Radix_node::add_to_tree(Indexador find_later, string what, int pos) {
         }
         i = 0;
         bool did = false;
-        for (Radix_node *b : this->children) {
+        for (Radix_node *b : *this->children) {
             if (b->letra < maybe->letra || did) {
                 a[i] = b;
                 i++;
@@ -161,10 +179,10 @@ bool Radix_node::add_to_tree(Indexador find_later, string what, int pos) {
         if (i == tam) {
             a[i] = maybe;
         }
-        this->children.clear();
+        this->children->clear();
         for (i =  0; i < tam + 1; i++) {
             a[i]->child_number = i;
-            this->children.push_back(a[i]);
+            this->children->push_back(a[i]);
         }
         return true;
     }
@@ -173,14 +191,14 @@ bool Radix_node::add_to_tree(Indexador find_later, string what, int pos) {
         this->str_sz = what.size();
         this->str = what;
         this->letra = what[pos];
-        this->main_index.push_back(find_later);
+        this->main_index->push_back(find_later);
     }
     if (this->letra != what[pos]) {
         return false;
     }
     if (this->leaf) {
         if (this->str == what) {
-            this->main_index.push_back(find_later);
+            this->main_index->push_back(find_later);
             return true;
         }
         this->complete = false;
@@ -190,7 +208,7 @@ bool Radix_node::add_to_tree(Indexador find_later, string what, int pos) {
         tmp1->clear();
         tmp2->clear();
         tmp2->letra = what[pos + 1];
-        tmp2->main_index.push_back(find_later);
+        tmp2->main_index->push_back(find_later);
         tmp2->parent = tmp1->parent = this;
         tmp2->complete = tmp1->complete = true;
         tmp2->leaf = tmp1->leaf = true;
@@ -206,44 +224,48 @@ bool Radix_node::add_to_tree(Indexador find_later, string what, int pos) {
         if (i == this->str_sz - 1) {
             delete tmp1;
             this->complete = true;
-            this->children.push_back(tmp2);
+            this->children->push_back(tmp2);
             return true;
         }
         i++;
         tmp1->letra = this->str[i];
         if (tmp1->letra == tmp2->letra) {
-            this->children.remove(tmp1);
-            this->children.push_back(tmp1);
+            this->children->remove(tmp1);
+            this->children->push_back(tmp1);
+            for (Indexador aaaaaaa : *this->main_index) {
+                tmp1->main_index->push_back(aaaaaaa);
+            }
+            this->main_index->clear();
             delete tmp2;
             tmp1->add_to_tree(find_later, what, pos + 1);
             return true;
         }
         if (tmp1->letra < tmp2->letra) {
-            this->children.push_back(tmp1);
-            this->children.push_back(tmp2);
+            this->children->push_back(tmp1);
+            this->children->push_back(tmp2);
             return true;
         }
-        this->children.push_back(tmp2);
-        this->children.push_back(tmp1);
+        this->children->push_back(tmp2);
+        this->children->push_back(tmp1);
         return true;
     }
-    if (this->children.size() == 0) {
+    if (this->children->size() == 0) {
         auto *maybe = new Radix_node();
         maybe->child_number = cont - 1;
         maybe->clear();
         maybe->letra = what[pos + 1];
-        maybe->main_index.push_back(find_later);
+        maybe->main_index->push_back(find_later);
         maybe->parent = this;
         maybe->complete = true;
         maybe->leaf = true;
         maybe->str_sz = what.size();
         maybe->str = what;
         maybe->file_path = this->file_path;
-        if (this->children.size() == 0) {
-            this->children.push_back(maybe);
+        if (this->children->size() == 0) {
+            this->children->push_back(maybe);
             return true;
         }
-        int tam = this->children.size();
+        int tam = this->children->size();
         Radix_node* a[tam+1];
         int i = 0;
         for (i = 0; i < tam + 1; i++) {
@@ -251,7 +273,7 @@ bool Radix_node::add_to_tree(Indexador find_later, string what, int pos) {
         }
         i = 0;
         bool did = false;
-        for (Radix_node *b : this->children) {
+        for (Radix_node *b : *this->children) {
             if (b->letra < maybe->letra || did) {
                 a[i] = b;
                 i++;
@@ -267,14 +289,14 @@ bool Radix_node::add_to_tree(Indexador find_later, string what, int pos) {
         if (i == tam) {
             a[i] = maybe;
         }
-        this->children.clear();
+        this->children->clear();
         for (i =  0; i < tam + 1; i++) {
             a[i]->child_number = i;
-            this->children.push_back(a[i]);
+            this->children->push_back(a[i]);
         }
         return true;
     }
-    for (Radix_node *maybe : this->children) {
+    for (Radix_node *maybe : *this->children) {
         if (maybe->add_to_tree(find_later, what, pos+1)) {
             return true;
         }
@@ -284,19 +306,19 @@ bool Radix_node::add_to_tree(Indexador find_later, string what, int pos) {
     maybe->child_number = cont - 1;
     maybe->clear();
     maybe->letra = what[pos + 1];
-    maybe->main_index.push_back(find_later);
+    maybe->main_index->push_back(find_later);
     maybe->parent = this;
     maybe->complete = true;
     maybe->leaf = true;
     maybe->str_sz = what.size();
     maybe->str = what;
     maybe->file_path = this->file_path;
-    if (this->children.size() == 0) {
-        this->children.push_back(maybe);
+    if (this->children->size() == 0) {
+        this->children->push_back(maybe);
         return true;
 
     }
-    int tam = this->children.size();
+    int tam = this->children->size();
     Radix_node* a[tam+1];
     int i = 0;
     for (i = 0; i < tam + 1; i++) {
@@ -305,7 +327,7 @@ bool Radix_node::add_to_tree(Indexador find_later, string what, int pos) {
     }
     i = 0;
     bool did = false;
-    for (Radix_node *b : this->children) {
+    for (Radix_node *b : *this->children) {
         if (b->letra < maybe->letra || did) {
             a[i] = b;
             i++;
@@ -321,10 +343,10 @@ bool Radix_node::add_to_tree(Indexador find_later, string what, int pos) {
     if (i == tam) {
         a[i] = maybe;
     }
-    this->children.clear();
+    this->children->clear();
     for (i =  0; i < tam + 1; i++) {
         a[i]->child_number = i;
-        this->children.push_back(a[i]);
+        this->children->push_back(a[i]);
     }
     return true;
 }
@@ -380,6 +402,13 @@ string token(string str, int *loc) {
 }
 
 bool Radix_node::from_file_specific(int loc, string what, int pos) {
+    if (pos == what.size()) {
+        for (long long yeah : *this->children_list) {
+            auto *maybe = new Radix_node();
+            maybe->from_file(yeah);
+            this->children->push_back(maybe);
+        }
+    }
     fstream file;
     file.open(this->file_path, ios::in | ios::binary);
     file.seekg(loc*sizeof(char), ios::beg);
@@ -392,29 +421,61 @@ bool Radix_node::from_file_specific(int loc, string what, int pos) {
     }
     file.read(reinterpret_cast<char *>(&this->where_father), sizeof(this->where_father));
     file.read(reinterpret_cast<char *>(&this->str_sz), sizeof(int));
-    file.read(reinterpret_cast<char *>(&this->str), this->str_sz*sizeof(char));
+    if (this->str_sz != 0) {
+        file.read(reinterpret_cast<char *>(&this->str), this->str_sz*sizeof(char));
+    }
     int a;
     file.read(reinterpret_cast<char *>(&a), sizeof(int));
     int *ind = static_cast<int *>(malloc(a * sizeof(int)));
     for (int i = 0; i < a; i++) {
         int b;
         file.read(reinterpret_cast<char *>(&b), sizeof(int));
-        this->children_list.push_back(b);
+        this->children_list->push_back(b);
         ind[i] = b;
     }
     file.read(reinterpret_cast<char *>(&a), sizeof(int));
     for (int i = 0; i < a; i++) {
         Indexador b;
         file.read(reinterpret_cast<char *>(&b), sizeof(int));
-        this->main_index.push_back(b);
+        this->main_index->push_back(b);
     }
     if (!this->leaf) {
-        for (int yeah : this->children_list) {
+        for (long long yeah : *this->children_list) {
             auto *maybe = new Radix_node();
             if (maybe->from_file_specific(yeah, what, pos+1)) {
-                this->children.push_back(maybe);
+                this->children->push_back(maybe);
             }
         }
     }
     return true;
+}
+
+void clear_files() {
+    ofstream file;
+    file.open("NAMES/TREE.bin", ios::out | ios::trunc);
+    file.close();
+    file.open("SUBTYPES/TREE.bin", ios::out | ios::trunc);
+    file.close();
+    file.open("SUPERTYPES/TREE.bin", ios::out | ios::trunc);
+    file.close();
+    file.open("TEXT/TREE.bin", ios::out | ios::trunc);
+    file.close();
+    file.open("TYPES/TREE.bin", ios::out | ios::trunc);
+    file.close();
+    file.open("COLORS/Red.bin", ios::out | ios::trunc);
+    file.close();
+    file.open("COLORS/Green.bin", ios::out | ios::trunc);
+    file.close();
+    file.open("COLORS/Blue.bin", ios::out | ios::trunc);
+    file.close();
+    file.open("COLORS/White.bin", ios::out | ios::trunc);
+    file.close();
+    file.open("COLORS/Black.bin", ios::out | ios::trunc);
+    file.close();
+    file.open("COLORS/Uncolored.bin", ios::out | ios::trunc);
+    file.close();
+    file.open(INDEX_FILE, ios::out | ios::trunc);
+    file.close();
+    file.open(MAIN_FILE, ios::out | ios::trunc);
+    file.close();
 }

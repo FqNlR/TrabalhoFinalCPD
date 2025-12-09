@@ -57,8 +57,17 @@ void value_store(int value, Indexador local) {
     fstream file;
     fstream file_info;
     file_info.open(VALUES_PATH, ios::app | ios::in | ios::binary);
+    char *aaaaaaaaaa = static_cast<char*>(malloc(10*sizeof(char)));
+    for (int i = 0; i < 10; i++) {
+        aaaaaaaaaa[i] = 0;
+    }
     string num;
-    itoa(value, num.data(), 0);
+    int temp;
+    while (value!=0) {
+        temp = value%10;
+        num = temp + '0';
+        value = value/10;
+    }
     string path = VALUE_PATH;
     path += num;
     file.open(path, ios::app | ios::binary);

@@ -18,7 +18,7 @@ void Radix_node::clear() {
 
 bool Radix_node::to_file(string file_p_ath,long long father) {
     fstream file;
-    long long int loc = -1;
+    long long loc = -1;
     this->file_path = file_p_ath;
     file.open(this->file_path, ios::in | ios::out | ios::binary);
     if (!file.is_open()) {
@@ -37,21 +37,21 @@ bool Radix_node::to_file(string file_p_ath,long long father) {
         file.seekg(sizeof(long long), ios::cur);
         int string_sz;
         file.read(reinterpret_cast<char *>(&string_sz), sizeof(int));
-        if (string_sz < 0) {
+        if (string_sz > 0) {
             file.seekg(string_sz*sizeof(char), ios::cur);
         }
         file.seekg(sizeof(int), ios::cur);
         file.seekg(sizeof(long long)*this->child_number, ios::cur);
-        long long int a = file.tellg();
+        long long a = file.tellg();
         if (a == -1) {
             cerr<<"REALMENTE QUERO MORRER";
         }
-        cout << a << endl;
+        //cout << a << endl;
         file.seekp(a, ios::beg);
         if (file.fail()) {
             cerr << "Error opening file second att" << this->file_path << endl;
         }
-        file.write(reinterpret_cast<char *>(&loc), sizeof(int));
+        file.write(reinterpret_cast<char *>(&loc), sizeof(long long));
     }
     loc = -1;
     while (loc == -1) {
@@ -65,13 +65,13 @@ bool Radix_node::to_file(string file_p_ath,long long father) {
     file.write(reinterpret_cast<char *>(&this->where_father), sizeof(this->where_father));
     file.write(reinterpret_cast<char *>(&this->str_sz), sizeof(this->str_sz));
     if (this->str_sz != 0) {
-        file.write(reinterpret_cast<char *>(&this->str), this->str_sz*sizeof(char));
+        file.write(this->str.c_str(), this->str_sz*sizeof(char));
     }
     int a = this->children->size();
     file.write(reinterpret_cast<char *>(&a), sizeof(int));
     for (int i = 0; i < a; i++) {
-        int b = 0;
-        file.write(reinterpret_cast<char *>(&b), sizeof(int));
+        long long b = 0;
+        file.write(reinterpret_cast<char *>(&b), sizeof(long long));
     }
     a = this->main_index->size();
     file.write(reinterpret_cast<char *>(&a), sizeof(int));
@@ -94,6 +94,9 @@ bool Radix_node::to_file(string file_p_ath,long long father) {
 void Radix_node::from_file(long long loc) {
     fstream file;
     file.open(this->file_path, ios::in | ios::binary);
+    if (file.fail()) {
+        cerr << "Error opening file second att" << this->file_path << endl;
+    }
     file.seekg(loc, ios::beg);
     file.read(reinterpret_cast<char *>(&this->complete), sizeof(this->complete));
     file.read(reinterpret_cast<char *>(&this->leaf), sizeof(this->leaf));
@@ -101,15 +104,18 @@ void Radix_node::from_file(long long loc) {
     file.read(&this->letra, sizeof(this->letra));
     file.read(reinterpret_cast<char *>(&this->where_father), sizeof(this->where_father));
     file.read(reinterpret_cast<char *>(&this->str_sz), sizeof(int));
-    if (this->str_sz != 0) {
-        file.read(reinterpret_cast<char *>(&this->str), this->str_sz*sizeof(char));
+    char aaaaaaaa;
+    this->str.clear();
+    for (int i = 0; i < this->str_sz; i++) {
+        file.read(&aaaaaaaa, sizeof(char));
+        this->str += aaaaaaaa;
     }
     int a;
     file.read(reinterpret_cast<char *>(&a), sizeof(int));
     this->children_list = new list<long long>;
     for (int i = 0; i < a; i++) {
         long long b;
-        file.read(reinterpret_cast<char *>(&b), sizeof(b));
+        file.read(reinterpret_cast<char *>(&b), sizeof(long long));
         this->children_list->push_back(b);
     }
     file.read(reinterpret_cast<char *>(&a), sizeof(int));
@@ -123,6 +129,7 @@ void Radix_node::from_file(long long loc) {
     if (!this->leaf) {
         for (long long yeah : *this->children_list) {
             auto *maybe = new Radix_node();
+            maybe->file_path = this->file_path;
             maybe->from_file(yeah);
             this->children->push_back(maybe);
         }
@@ -411,34 +418,38 @@ bool Radix_node::from_file_specific(int loc, string what, int pos) {
     }
     fstream file;
     file.open(this->file_path, ios::in | ios::binary);
-    file.seekg(loc*sizeof(char), ios::beg);
+    if (file.fail()) {
+        cerr << "Error opening file second att" << this->file_path << endl;
+    }
+    file.seekg(loc, ios::beg);
     file.read(reinterpret_cast<char *>(&this->complete), sizeof(this->complete));
     file.read(reinterpret_cast<char *>(&this->leaf), sizeof(this->leaf));
     file.read(reinterpret_cast<char *>(&this->root), sizeof(this->root));
     file.read(&this->letra, sizeof(this->letra));
-    if (what[pos] != this->letra) {
-        return false;
-    }
     file.read(reinterpret_cast<char *>(&this->where_father), sizeof(this->where_father));
     file.read(reinterpret_cast<char *>(&this->str_sz), sizeof(int));
-    if (this->str_sz != 0) {
-        file.read(reinterpret_cast<char *>(&this->str), this->str_sz*sizeof(char));
+    char aaaaaaaa;
+    this->str.clear();
+    for (int i = 0; i < this->str_sz; i++) {
+        file.read(&aaaaaaaa, sizeof(char));
+        this->str += aaaaaaaa;
     }
     int a;
     file.read(reinterpret_cast<char *>(&a), sizeof(int));
-    int *ind = static_cast<int *>(malloc(a * sizeof(int)));
+    this->children_list = new list<long long>;
     for (int i = 0; i < a; i++) {
-        int b;
-        file.read(reinterpret_cast<char *>(&b), sizeof(int));
+        long long b;
+        file.read(reinterpret_cast<char *>(&b), sizeof(long long));
         this->children_list->push_back(b);
-        ind[i] = b;
     }
     file.read(reinterpret_cast<char *>(&a), sizeof(int));
+    this->main_index = new list<Indexador>;
     for (int i = 0; i < a; i++) {
         Indexador b;
         file.read(reinterpret_cast<char *>(&b), sizeof(int));
         this->main_index->push_back(b);
     }
+    this->children = new list<Radix_node*>;
     if (!this->leaf) {
         for (long long yeah : *this->children_list) {
             auto *maybe = new Radix_node();
@@ -478,4 +489,24 @@ void clear_files() {
     file.close();
     file.open(MAIN_FILE, ios::out | ios::trunc);
     file.close();
+    int value;
+    fstream file_aux;
+    file_aux.open(VALUES_PATH, ios::in | ios::binary);
+    if (!file_aux.is_open()) {
+        return;
+    }
+    while (!file_aux.eof()&&!file_aux) {
+        file_aux.read(reinterpret_cast<char *>(&value), sizeof(value));
+        string num;
+        if (!num.empty()) {
+            itoa(value, num.data(), 0);
+            string path = VALUE_PATH;
+            path += num;
+            file.open(path, ios::out | ios::trunc);
+            file.close();
+        }
+    }
+    file_aux.close();
+    file_aux.open(VALUES_PATH, ios::out | ios::trunc);
+    file_aux.close();
 }

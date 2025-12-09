@@ -7,6 +7,7 @@ void Carta::print() const{
     cout<< "Custo de mana da carta: "<< this->mana_value << endl;
     cout<< "Supertipos da carta: "<< this->supertypes << endl;
     cout<< "Subtipos da carta: "<< this->subtypes << endl;
+    cout<< "Texto da carta: "<< this->text << endl;
     cout<<endl;
     cout<<endl;
 }

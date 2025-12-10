@@ -70,6 +70,7 @@ void value_store(int value, Indexador local) {
     }
     string path = VALUE_PATH;
     path += num;
+    path += ".bin";
     file.open(path, ios::app | ios::binary);
     file.write(reinterpret_cast<char *>(&local), sizeof(local));
     file.close();

@@ -70,6 +70,10 @@ int main()
             add_to_all_radix(all, uma_carta, onde);
             uma_carta.clear();
         }
+        fstream file;
+        file.open(MAX_CARDS, ios::out | ios::binary | ios::trunc);
+        file.write(reinterpret_cast<char *>(&max_id), sizeof(max_id));
+        file.close();
         cout<<".";
         all[NAMES].file_path = FILE_FOR_NAMES;
         all[TYPES].file_path = FILE_FOR_TYPES;
@@ -82,19 +86,27 @@ int main()
         }
     }
     cout<<endl;
+    int max_id = 0;
+    fstream file;
+    file.open(MAX_CARDS, ios::in | ios::binary);
+    file.read(reinterpret_cast<char *>(&max_id), sizeof(max_id));
+    file.close();
     imprimir_help();
     string entrada;
     do {
+        if (entrada[0] == '\n') {
+            break;
+        }
         entrada.clear();
         cin>>entrada;
-        if (entrada.size() >= 3) {
-            int aux;
-            imprimir(busca(entrada, &aux), aux);
-        }
+        int aux = max_id;
+        imprimir(busca(entrada, &aux), &aux);
+        cout<< "Nova pesquisa: "<<endl;
+        cin>>entrada;
         if (tolower(entrada[0]) == 'h') {
             imprimir_help();
         }
-    }while (entrada != "\n");
+    }while (true);
     return 0;
 }
 

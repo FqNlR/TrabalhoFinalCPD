@@ -1,11 +1,15 @@
 #include "search.h"
 
-Indexador *merge(Indexador *left, Indexador *right, int *numerol, int numeror, int tipo){
+Indexador *merge(Indexador *left, Indexador *right, int *numerol, int *numeror, int tipo){
     list<Indexador> lista_ambos;
     list<Indexador> lista_interseccao;
+    if (left == nullptr && right == nullptr) {
+        *numerol = 0;
+        return nullptr;
+    }
     int i = 0;
     int j = 0;
-    while (i < *numerol && j < numeror) {
+    while (i < *numerol && j < *numeror) {
         if (left[i].id == right[j].id) {
             lista_ambos.push_back(left[i]);
             lista_interseccao.push_back(left[i]);
@@ -21,11 +25,15 @@ Indexador *merge(Indexador *left, Indexador *right, int *numerol, int numeror, i
             i++;
         }
     }
-    for (i; i < *numerol; i++) {
-        lista_ambos.push_back(left[i]);
+    if (left != nullptr) {
+        for (i; i < *numerol; i++) {
+            lista_ambos.push_back(left[i]);
+        }
     }
-    for (j; j < numeror; j++) {
-        lista_ambos.push_back(right[j]);
+    if (right != nullptr) {
+        for (j; j < *numeror; j++) {
+            lista_ambos.push_back(right[j]);
+        }
     }
     if (tipo == 0) {
         Indexador *merged = static_cast<Indexador *>(malloc(lista_ambos.size()*sizeof(Indexador)));
@@ -50,26 +58,37 @@ Indexador *merge(Indexador *left, Indexador *right, int *numerol, int numeror, i
     return vazio;
 }
 
-Indexador *busca_radix(Radix_node* nos, string busca, int tipo, int *numero) {
+Indexador *busca_radix(Radix_node* nos, string busca, int tipo, int *numero, int search_size) {
     list<Indexador>* lista;
-    if (busca != "NAO") {
+    if (busca != "==NAO++") {
         nos->from_file_specific(0, busca, 0);
     }
     Radix_node *temp = nos;
-    while (!temp->complete) {
+    while (!temp->children->empty()) {
         temp = temp->children->front();
+    }
+    while (!temp->complete && !temp->children->empty()) {
+        temp = temp->children->front();
+    }
+    if (!temp->complete) {
+        Indexador *merged = nullptr;
+        return merged;
     }
     lista = temp->main_index;
     Indexador *merged = static_cast<Indexador *>(malloc(lista->size()*sizeof(Indexador)));
+    *numero = lista->size();
     Indexador *help;
-    int *helper;
+    int helper;
     int i = 0;
     for (Indexador l : *lista) {
         merged[i] = l;
+        i++;
     }
+    helper = i - 1;
+    busca = "==NAO++";
     for (Radix_node *l : *nos->children) {
-        help = busca_radix(l, "NAO",tipo, helper);
-        merged = merge(merged, help, numero, *helper, 0);
+        help = busca_radix(l, busca, tipo, &helper, search_size);
+        merged = merge(merged, help, numero, &helper, 0);
     }
     return merged;
 }
@@ -231,14 +250,14 @@ Indexador *busca_value(int busca, int *numero) {
 Indexador *busca(string busca, int *num) {
     Indexador *ret = static_cast<Indexador *>(malloc(sizeof(Indexador)**num));
     for (int i = 0; i < *num; i++) {
-        ret[i].id = busca[i];
+        ret[i].id = i;
     }
     string aux;
     aux.clear();
     for (int i = 0; i < busca.size(); i++) {
         if (isalnum(busca[i])) {
             while (isalnum(busca[i])) {
-                aux += busca[i];
+                aux += tolower(busca[i]);
                 i++;
                 if (i == busca.size()) {
                     break;
@@ -246,8 +265,8 @@ Indexador *busca(string busca, int *num) {
             }
             auto *no = new Radix_node();
             no->file_path = FILE_FOR_NAMES;
-            int size;
-            ret = merge(ret, busca_radix(no, aux, 0, &size), num, size, 1);
+            int size = 0;
+            ret = merge(ret, busca_radix(no, aux, 0, &size, aux.size()), num, &size, 1);
         }
         if (i == busca.size()) {
             break;
@@ -259,7 +278,7 @@ Indexador *busca(string busca, int *num) {
                     break;
                 }
                 int size;
-                ret = merge(ret, busca_color(busca[i], &size), num, size, 1);
+                ret = merge(ret, busca_color(busca[i], &size), num, &size, 1);
                 i++;
                 i++;
                 break;
@@ -268,7 +287,7 @@ Indexador *busca(string busca, int *num) {
                 if (!aux.empty()) {
                     auto *no = new Radix_node();
                     no->file_path = FILE_FOR_TEXT;
-                    ret = merge(ret, busca_radix(no, aux, 0, &size), num, size, 1);
+                    ret = merge(ret, busca_radix(no, aux, 0, &size, aux.size()), num, &size, 1);
                 }
                 break;
             case SEP_SUB:
@@ -276,7 +295,7 @@ Indexador *busca(string busca, int *num) {
                 if (!aux.empty()) {
                     auto *no = new Radix_node();
                     no->file_path = FILE_FOR_SUB;
-                    ret = merge(ret, busca_radix(no, aux, 0, &size), num, size, 1);
+                    ret = merge(ret, busca_radix(no, aux, 0, &size, aux.size()), num, &size, 1);
                 }
                 break;
             case SEP_VAL:
@@ -284,7 +303,7 @@ Indexador *busca(string busca, int *num) {
                 int inteiro;
                 if (!aux.empty()) {
                     inteiro = atoi(aux.c_str());
-                    ret = merge(ret, busca_value(inteiro, &size), num, size, 1);
+                    ret = merge(ret, busca_value(inteiro, &size), num, &size, 1);
                 }
                 break;
             case SEP_TYP:
@@ -292,7 +311,7 @@ Indexador *busca(string busca, int *num) {
                 if (!aux.empty()) {
                     auto *no = new Radix_node();
                     no->file_path = FILE_FOR_TYPES;
-                    ret = merge(ret, busca_radix(no, aux, 0, &size), num, size, 1);
+                    ret = merge(ret, busca_radix(no, aux, 0, &size, aux.size()), num, &size, 1);
                 }
                 break;
             case SEP_SUPER:
@@ -300,27 +319,50 @@ Indexador *busca(string busca, int *num) {
                 if (!aux.empty()) {
                     auto *no = new Radix_node();
                     no->file_path = FILE_FOR_SUPER;
-                    ret = merge(ret, busca_radix(no, aux, 0, &size), num, size, 1);
+                    ret = merge(ret, busca_radix(no, aux, 0, &size, aux.size()), num, &size, 1);
                 }
                 break;
         }
         return ret;
     }
+    return ret;
 }
 
-void imprimir(Indexador *no, int tam) {
+void imprimir(Indexador *no, int *tam) {
     list<Carta*> lista;
-    for (int i = 0; i <tam; i++) {
+    if (no == nullptr) {
+        cout<< "-----------------------------"<< endl;
+        cout << "Busca invalida ou sem resultados"<< endl;
+        cout<< "-----------------------------"<< endl;
+    }
+    for (int i = 0; i < *tam; i++) {
         auto *uma = new Carta();
         no[i].from_index();
         uma->from_main_file(no[i].pos);
         lista.push_back(uma);
     }
+    if (lista.empty()) {
+        cout<< "-----------------------------"<< endl;
+        cout << "Busca invalida ou sem resultados"<< endl;
+        cout<< "-----------------------------"<< endl;
+    }
     auto *prim = new Carta();
     prim = lista.front();
     int i = 0;
-    int j = 10;
+    int j = 5;
     char aux = 0;
+    if (lista.size() <= 5) {
+        for (i = 0; i < lista.size(); i++ ) {
+            auto *uma = new Carta();
+            uma = lista.front();
+            lista.pop_front();
+            uma->print();
+        }
+        cout << i << "/" << *tam << endl;
+        cout<<"aperte enter uma tecla para encerrar"<<endl;
+        cin.get();
+        return;
+    }
     do {
         while (i < j) {
             auto *uma = new Carta();
@@ -329,14 +371,18 @@ void imprimir(Indexador *no, int tam) {
             uma->print();
             if (prim == uma) {
                 i = 0;
-                j = j - tam;
+                j = j - *tam;
             }
             lista.push_back(uma);
         }
-        cout << i << "/" << tam << endl;
-        cout<<"aperte enter para encerrar ou outra tecla para as proximas cartas(a lista e circular): "<<endl;
-        while (aux == 0) {
-            cin.get(aux);
+        cout << i << "/" << *tam << endl;
+        cout<<"aperte enter para encerrar ou d para continuar): "<<endl;
+        while (aux != 'd' && aux != '\n') {
+            cin>>aux;
+        }
+        if (aux == 'd') {
+            i = i+5;
+            j = j+5;
         }
     }while (cin.get() != '\n'&& aux != '\n');
 }

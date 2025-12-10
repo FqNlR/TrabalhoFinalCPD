@@ -10,6 +10,7 @@
 #define ATOMIC_CARDS "AtomicCards.json"
 #define MAIN_FILE "lista-das-cartas.bin"
 #define INDEX_FILE "lista-dos-index.bin"
+#define MAX_CARDS "MAX_CARDS"
 
 
 using namespace std;
@@ -46,7 +47,7 @@ class Indexador {
     public:
     //variaveis
     int id;
-    int pos;
+    long long pos;
 
     //metodos
     bool to_index();
